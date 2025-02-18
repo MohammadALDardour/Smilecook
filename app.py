@@ -7,6 +7,7 @@ from resources.recipe import RecipeListResource, RecipeResource, RecipePublishRe
 app = Flask(__name__)
 api = Api(app)
 
+
 api.add_resource(RecipeListResource, '/recipes')
 api.add_resource(RecipeResource, '/recipes/<int:recipe_id>')
 api.add_resource(RecipePublishResource, '/recipes/<int:recipe_id>/publish')
