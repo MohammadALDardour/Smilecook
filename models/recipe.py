@@ -1,3 +1,6 @@
+from extensions import db
+
+
 recipe_list = []
 
 def get_last_id():
@@ -13,41 +16,19 @@ def get_last_id():
     return last_recipe.id +1
 
 
-class Recipe:
-    def __init__(self, name, description, num_of_servings, cook_time, directions):
-        """
-        Args:
-        name: The name of the recipe.
-        description: the description of recipe.
-        num_of_servings: The number of servings.
-        cook_time: The cooking time required. This is an integer whose units are in seconds.
-        directions: The directions.
+class Recipe(db.Model):
+    __tablename__ = 'recipe'
 
-        The ID is self-incremented and is_publish is set to false by default.
-        This means that, by default, the recipe will be set to draft (not published).
-        
-        return:
-        Note
-        """
-        self.id = get_last_id()
-        self.name = name
-        self.description = description
-        self.num_of_servings = num_of_servings
-        self.cook_time = cook_time
-        self.directions = directions
-        self.is_publish = False
-
-
-    @property
-    def data(self):
-        return {
-            'id': self.id,
-            'name': self.name,
-            'description': self.description,
-            'num_of_servings': self.num_of_servings,
-            'cook_time': self.cook_time,
-            'directions': self.directions
-        }
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(100), nullable=False)
+    description = db.Column(db.String(200))
+    num_of_servings = db.Column(db.Integer)
+    cook_time = db.Column(db.Integer)
+    directions = db.Column(db.String(1000))
+    is_publish = db.Column(db.Boolean(), default=False)
+    created_at = db.Column(db.DateTime(), nullable=False, server_default=db.func.now())
+    updated_at = db.Column(db.DateTime(), nullable=False, server_default=db.func.now(), onupdate=db.func.now())
+    user_id = db.Column(db.Integer(), db.ForeignKey("user.id"))
     
 
     

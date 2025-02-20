@@ -1,3 +1,7 @@
 Flask
 Flask-RESTful
 httpie
+Flask-SQLAlchemy
+Flask-Migrate
+psycopg2-binary
+passlib
