@@ -24,6 +24,12 @@ class User(db.Model):
         return cls.query.filter_by(username=username).first()
     
 
+    @classmethod
+    def get_by_id(cls, id):
+        return cls.query.filter_by(id=id).first()
+    
+
+
     def save(self):
         db.session.add(self)
         db.session.commit()

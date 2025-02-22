@@ -1,21 +1,6 @@
 from extensions import db
 
 
-recipe_list = []
-
-def get_last_id():
-    """
-    first we define recipe list so that we can store the recipes in the application memory.
-    Then, we define get_last_id function to get the ID of our last recipe.
-    Later, when we are create a new recipe, we will use this method to evaluate the last ID in recipe_list so that we can come up with a new ID for the new recipe.
-    """
-    if recipe_list:
-        last_recipe = recipe_list[-1]
-    else:
-        return 1
-    return last_recipe.id +1
-
-
 class Recipe(db.Model):
     __tablename__ = 'recipe'
 
@@ -30,6 +15,33 @@ class Recipe(db.Model):
     updated_at = db.Column(db.DateTime(), nullable=False, server_default=db.func.now(), onupdate=db.func.now())
     user_id = db.Column(db.Integer(), db.ForeignKey("user.id"))
     
+    def data(self):
+        return {
+            'id': self.id,
+            'name': self.name,
+            'description': self.description,
+            'num_of_servings': self.num_of_servings,
+            'cook_time': self.cook_time,
+            'directions': self.directions,
+            'user_id': self.user_id
+        }
+    
+    @classmethod
+    def get_by_id(cls, recipe_id):
+        return cls.query.filter_by(id=recipe_id).first()
+    
+
+    @classmethod
+    def get_all_published(cls):
+        return cls.query.filter_by(is_publish=True).all()
+
+    def save(self):
+        db.session.add(self)
+        db.session.commit()
+
+    def delete(self):
+        db.session.delete(self)
+        db.commit()
 
     
 
